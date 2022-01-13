@@ -1,0 +1,102 @@
+-- Use sql_store DB select and return specific data point for clients
+USE sql_store;
+SELECT customer_id, first_name, last_name 
+FROM 
+Customers;
+
+-- Select all the table
+USE sql_store;
+SELECT *
+FROM
+customers;
+
+-- Use WHERE orORDER BY clause for more filtering
+USE sql_store;
+SELECT *
+FROM customers
+-- WHERE customer_id = 1
+ORDER BY first_name
+-- SELECT clause
+SELECT 
+customer_id, 
+first_name, 
+last_name, 
+address, 
+city, 
+birth_date, 
+phone, 
+state, 
+points, 
+(points * 10) AS "Discount_factor"
+FROM customers
+-- Select all product from our database and return name, original price and a new price which is based on the calculation increasing the price by 10%
+USE sql_store.products;
+SELECT name, unit_price, (unit price * 1.1) AS "New Price"
+FROM products
+--Add condition using the clause WHERE
+SELECT *
+FROM customers
+WHERE points > 1000
+--Return orders during 2019
+SELECT * FROM orders
+WHERE ordered_date >= "2019-01-01"
+--Combining multiple condition to filter
+SELECT * FROM orders
+WHERE NOT (ordered_date >= "2019-01-01" AND points > 3000) OR state = "MA"
+--from order_item table get order id number 6 where total price is greater than 30
+SELECt *
+FROM order_item 
+Where order_id = 6 AND unit_price * quantity > 30
+--USE OR
+SELECT *
+FROM customers
+WHERE NOT state IN ("VA", "MA", "GA")
+--Return products with
+quantity in stock equal to 49, 38, 72
+SELECT *
+FROM customers
+WHERE quantity_in_stock IN (49, 38, 72) 
+AND WHERE point 
+BETWEEN 1000 AND 2000
+--Get the customers address countains Trail or avenue and phone number countains 9
+SELECT *
+FROM customers
+WHERE address LIKE "%Trail%" OR 
+      adress LIKE "%Avenue%" AND 
+      
+      phone LIKE "%9"
+--Using REGEXP to replace LIKE "%" or "-" use^ for begening, $ ending or | , [a-h]f for multiple search pattern:
+SELECT *
+FROM customers
+WHERE last_name REGEXP '^Ohio' or last_name REGEXP '^Field|Mac$|Rose|[gim]e'
+--exercise -> Get the customers who
+    --first name are ELKA or Ambur
+    --Last name end with EY or ON
+    --Last name starts with MY or contain ES
+    --last name contains B followed by R or U
+SELECT *
+FROM customers
+WHERE first_name REGEXP 'ELKA|Ambur'
+WHERE last_name REGEXP '^MY|ES'
+WHERE last_name  REGEXP 'b[ru]' or we can write 'br|bu'
+--if we need to filter client without phone to fill in gaps
+SELECT *
+FROM customers
+WHERE phone IS NULL
+--statement for the customers who have phone number
+WHERE phone IS NOT NULL
+--Get customers whose ordre is not shipphed yet
+SELECT *
+FROM orders
+WHERE shipped_date IS NULL
+--Sort data using ORDER BY DESC / 1.2.3
+SELECT *, quantity * unit_price AS Total_Price
+FROM order_items
+WHERE order_id = 2
+ORDER BY Total_Price DESC
+--how to limit the number of record from your query
+--get list of most loyal customers based on their points
+SELECT *
+FROM customere
+ORDER BY points DESC
+LIMIT 3
